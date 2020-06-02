@@ -21,8 +21,8 @@ type MvMovie struct {
 // }
 
 // Indexs 列表
-func (index *MvMovie) Indexs() (indexs []MvMovie, err error) {
-	if err = orm.Eloquent.Select("id, cid, title, other, created_at").Order("id desc").Limit(3).Find(&indexs).Error; err != nil {
+func (index *MvMovie) Indexs(inid []int64) (indexs []MvMovie, err error) {
+	if err = orm.Eloquent.Select("id, cid, title, other").Where("cid in (?)", inid).Order("created_at desc").Limit(9).Find(&indexs).Error; err != nil {
 		return
 	}
 	return
