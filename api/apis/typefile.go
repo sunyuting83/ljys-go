@@ -8,6 +8,12 @@ type Movielist struct {
 	Movie      []MovieLs    `json:"movie"`
 }
 
+type Classlist struct {
+	ID    int64     `json:"id"`
+	CName string    `json:"c_name"`
+	Movie []MovieLs `json:"movie"`
+}
+
 // MovieSmall small classify
 type MovieSmall struct {
 	ID    int64  `json:"id"`

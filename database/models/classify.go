@@ -26,3 +26,11 @@ func (classify *MvClassify) SmallClass(id int64) (classifys []MvClassify, err er
 	}
 	return
 }
+
+// GetClass 列表
+func (classify *MvClassify) GetClass(id int64) (classifys []MvClassify, err error) {
+	if err = orm.Eloquent.Where("top_id = ?", id).Select("id, top_id, c_name").Find(&classifys).Error; err != nil {
+		return
+	}
+	return
+}

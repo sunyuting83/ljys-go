@@ -63,19 +63,25 @@ func makeMovieData(i []int64) []MovieLs {
 	var (
 		index model.MvMovie
 		data  []MovieLs
-		p     MovieLs
 	)
 	d, err := index.Indexs(i)
 	if err != nil {
 		fmt.Println("err")
 	}
 	for _, item := range d {
-		var other []byte = []byte(item.Other)
-		if err := json.Unmarshal(other, &p); err != nil {
-			// fmt.Println(err.Error())
-			fmt.Println("err")
-		}
+		p := strTojson(item.Other)
 		data = append(data, MovieLs{ID: item.ID, Title: item.Title, Img: p.Img, Score: p.Score, Remarks: p.Remarks})
 	}
 	return data
+}
+
+// strTojson fun
+func strTojson(s string) MovieLs {
+	var p MovieLs
+	var other []byte = []byte(s)
+	if err := json.Unmarshal(other, &p); err != nil {
+		// fmt.Println(err.Error())
+		return p
+	}
+	return p
 }
