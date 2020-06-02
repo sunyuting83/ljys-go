@@ -10,45 +10,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Movielist index movie list data
-type Movielist struct {
-	ID         int64        `json:"id"`
-	CName      string       `json:"c_name"`
-	Smallclass []MovieSmall `json:"smallclass"`
-	Movie      []MovieLs    `json:"movie"`
-}
-
-// MovieSmall small classify
-type MovieSmall struct {
-	ID    int64  `json:"id"`
-	CName string `json:"c_name"`
-}
-
-// MovieLs movie data
-type MovieLs struct {
-	ID      int64  `json:"id"`
-	Title   string `json:"title"`
-	Img     string `json:"img"`
-	Remarks string `json:"remarks"`
-	Score   string `json:"score"`
-}
-
 var classify model.MvClassify
 
 // Indexs 列表数据
 func Indexs(c *gin.Context) {
 
-	allclass, err := classify.BigClass()
-	b, m := makeClassify(allclass)
+	b, m := MakeClassify()
 	data := makeMovieList(b)
-
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  1,
-			"message": "抱歉未找到相关信息",
-		})
-		return
-	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":    0,
@@ -56,22 +24,6 @@ func Indexs(c *gin.Context) {
 		"menumore":  m,
 		"movielist": data,
 	})
-}
-
-// makeClassify make classify list
-func makeClassify(c []model.MvClassify) ([]model.MvClassify, []model.MvClassify) {
-	var (
-		b []model.MvClassify
-		s []model.MvClassify
-	)
-	for _, item := range c {
-		if item.TopID == 0 {
-			b = append(b, item)
-		} else {
-			s = append(s, item)
-		}
-	}
-	return b, s
 }
 
 // makeMovieList make movie list for index

@@ -1,7 +1,7 @@
 package router
 
 import (
-	. "newapp/api/apis"
+	apis "newapp/api/apis"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,7 +9,10 @@ import (
 // InitRouter make router
 func InitRouter() *gin.Engine {
 	router := gin.Default()
-	router.GET("/index", Indexs)
+	api := router.Group("/api")
+	{
+		api.GET("/index", apis.Indexs)
+	}
 
 	return router
 }
