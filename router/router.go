@@ -11,13 +11,5 @@ func InitRouter() *gin.Engine {
 	router := gin.Default()
 	router.GET("/index", Indexs)
 
-	router.GET("/users", Users)
-
-	router.POST("/user", Store)
-
-	router.PUT("/user/:id", Update)
-
-	router.DELETE("/user/:id", Destroy)
-
 	return router
 }

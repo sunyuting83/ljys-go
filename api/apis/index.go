@@ -33,10 +33,7 @@ type MovieLs struct {
 	Score   string `json:"score"`
 }
 
-var (
-	classify model.MvClassify
-	// index model.MvMovie
-)
+var classify model.MvClassify
 
 // Indexs 列表数据
 func Indexs(c *gin.Context) {
