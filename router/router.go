@@ -13,6 +13,7 @@ func InitRouter() *gin.Engine {
 	{
 		api.GET("/index", apis.Indexs)
 		api.GET("/getclass", apis.ClassLists)
+		api.GET("/list", apis.GetLists)
 	}
 
 	return router

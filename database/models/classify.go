@@ -34,3 +34,11 @@ func (classify *MvClassify) GetClass(id int64) (classifys []MvClassify, err erro
 	}
 	return
 }
+
+// GetOneClass 列表
+func (classify *MvClassify) GetOneClass(id int64) (classifys MvClassify, err error) {
+	if err = orm.Eloquent.Where("id = ?", id).Select("id, c_name").First(&classifys).Error; err != nil {
+		return
+	}
+	return
+}
