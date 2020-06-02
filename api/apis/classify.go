@@ -1,7 +1,6 @@
 package apis
 
 import (
-	"fmt"
 	model "newapp/database/models"
 )
 
@@ -10,13 +9,13 @@ func MakeClassify() ([]model.MvClassify, []model.MvClassify) {
 	var classify model.MvClassify
 	allclass, err := classify.BigClass()
 
-	if err != nil {
-		fmt.Println("err")
-	}
 	var (
 		b []model.MvClassify
 		s []model.MvClassify
 	)
+	if err != nil {
+		return b, s
+	}
 	for _, item := range allclass {
 		if item.TopID == 0 {
 			b = append(b, item)
