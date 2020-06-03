@@ -10,11 +10,6 @@
 /api/performer
 ```
 
-#### taglist
-```bash
-/api/tags
-```
-
 #### list
 ```bash
 /api/list
