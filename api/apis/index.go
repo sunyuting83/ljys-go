@@ -78,8 +78,7 @@ func makeMovieData(i []int64) []MovieLs {
 // strTojson fun
 func strTojson(s string) MovieLs {
 	var p MovieLs
-	var other []byte = []byte(s)
-	if err := json.Unmarshal(other, &p); err != nil {
+	if err := json.Unmarshal([]byte(s), &p); err != nil {
 		// fmt.Println(err.Error())
 		return p
 	}

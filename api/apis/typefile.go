@@ -28,3 +28,28 @@ type MovieLs struct {
 	Remarks string `json:"remarks"`
 	Score   string `json:"score"`
 }
+
+// MovieData movie data
+type MovieData struct {
+	Img       string   `json:"img"`
+	Remarks   string   `json:"reamarks"`
+	PlayPath  PlayPath `json:"paly_path"`
+	Languarge string   `json:"languarge"`
+	Profiles  string   `json:"profiles"`
+	Year      string   `json:"year"`
+	Soure     string   `json:"soure"`
+}
+
+// PlayPath paly_path
+type PlayPath struct {
+	Hls       []Playlist `json:"hls"`
+	Player    []Playlist `json:"player"`
+	More      bool       `json:"more"`
+	PlayCount int64      `json:"play_count"`
+}
+
+// Playlist play list
+type Playlist struct {
+	Name string `json:"name"`
+	Path string `json:"page"`
+}
