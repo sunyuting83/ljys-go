@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	model "newapp/database/models"
+	leveldb "newapp/leveldb"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,16 +15,24 @@ var classify model.MvClassify
 
 // Indexs 列表数据
 func Indexs(c *gin.Context) {
+	var datas gin.H
+	cache := leveldb.GetLevel("index")
+	if cache == "leveldb: not found" {
+		b, m := MakeClassify()
+		data := makeMovieList(b)
 
-	b, m := MakeClassify()
-	data := makeMovieList(b)
+		datas = gin.H{
+			"status":    0,
+			"menu":      b,
+			"menumore":  m,
+			"movielist": data,
+		}
+		leveldb.SetLevel("index", jsonToStr(datas), 86400000)
+	} else {
+		datas = strToJsons(cache)
+	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":    0,
-		"menu":      b,
-		"menumore":  m,
-		"movielist": data,
-	})
+	c.JSON(http.StatusOK, datas)
 }
 
 // makeMovieList make movie list for index
@@ -83,4 +92,24 @@ func strTojson(s string) MovieLs {
 		return p
 	}
 	return p
+}
+
+// strToJsons fun
+func strToJsons(s string) gin.H {
+	var result map[string]interface{}
+	err := json.Unmarshal([]byte(s), &result)
+	if err != nil {
+		return result
+	}
+	return result
+}
+
+// jsonToStr fun
+func jsonToStr(d gin.H) (result string) {
+	resultByte, errError := json.Marshal(d)
+	result = string(resultByte)
+	if errError != nil {
+		return result
+	}
+	return result
 }

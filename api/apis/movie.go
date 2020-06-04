@@ -6,7 +6,9 @@ import (
 	"math"
 	"net/http"
 	model "newapp/database/models"
+	leveldb "newapp/leveldb"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,30 +20,40 @@ func Movie(c *gin.Context) {
 	if err != nil {
 		intid = 100
 	}
-	b, m := MakeClassify()
-	data := makeMovie(intid)
-	hot := getHotLists(data.Cid)
-	newd := makeMovieDatas(data.Other)
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":    0,
-		"menu":      b,
-		"menumore":  m,
-		"id":        data.ID,
-		"title":     data.Title,
-		"cid":       data.Cid,
-		"director":  data.Director,
-		"performer": data.Performer,
-		"area":      data.Area,
-		"img":       newd["img"],
-		"reamarks":  newd["remarks"],
-		"play_path": newd["play_path"],
-		"languarge": newd["languarge"],
-		"profiles":  newd["profiles"],
-		"year":      newd["year"],
-		"score":     newd["score"],
-		"hotlist":   hot,
-	})
+	var datas gin.H
+	mname := strings.Join([]string{"list", id}, ":")
+	cache := leveldb.GetLevel(mname)
+	if cache == "leveldb: not found" {
+		b, m := MakeClassify()
+		data := makeMovie(intid)
+		hot := getHotLists(data.Cid)
+		newd := makeMovieDatas(data.Other)
+
+		datas = gin.H{
+			"status":    0,
+			"menu":      b,
+			"menumore":  m,
+			"id":        data.ID,
+			"title":     data.Title,
+			"cid":       data.Cid,
+			"director":  data.Director,
+			"performer": data.Performer,
+			"area":      data.Area,
+			"img":       newd["img"],
+			"reamarks":  newd["remarks"],
+			"play_path": newd["play_path"],
+			"languarge": newd["languarge"],
+			"profiles":  newd["profiles"],
+			"year":      newd["year"],
+			"score":     newd["score"],
+			"hotlist":   hot,
+		}
+		leveldb.SetLevel(mname, jsonToStr(datas), -1)
+	} else {
+		datas = strToJsons(cache)
+	}
+	c.JSON(http.StatusOK, datas)
 }
 
 // makeMovie make movie data

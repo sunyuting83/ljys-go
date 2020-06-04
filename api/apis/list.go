@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	model "newapp/database/models"
+	leveldb "newapp/leveldb"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,17 +20,30 @@ func GetLists(c *gin.Context) {
 	if err != nil {
 		fmt.Println("err")
 	}
-	b, m := MakeClassify()
-	cname, err := classify.GetOneClass(icid)
-	data := makeList(icid, ipage)
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":   0,
-		"menu":     b,
-		"menumore": m,
-		"ctitle":   cname.CName,
-		"movies":   data,
-	})
+	var datas gin.H
+	lname := strings.Join([]string{"list", cid, page}, ":")
+	cache := leveldb.GetLevel(lname)
+	if cache == "leveldb: not found" {
+		b, m := MakeClassify()
+		cname, err := classify.GetOneClass(icid)
+		if err != nil {
+			fmt.Println("err")
+		}
+		data := makeList(icid, ipage)
+
+		datas = gin.H{
+			"status":   0,
+			"menu":     b,
+			"menumore": m,
+			"ctitle":   cname.CName,
+			"movies":   data,
+		}
+		leveldb.SetLevel(lname, jsonToStr(datas), 86400000)
+	} else {
+		datas = strToJsons(cache)
+	}
+	c.JSON(http.StatusOK, datas)
 }
 
 // makeMovieList make movie list for index
