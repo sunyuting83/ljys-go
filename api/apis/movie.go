@@ -98,7 +98,7 @@ func makeMovieDatas(s string) map[string]interface{} {
 	return p
 }
 
-// makeTowArr make tow arr
+// makeTowArr arr 原始数组, c 数组长度
 func makeTowArr(arr []interface{}, c int) []interface{} {
 	// 先定义一个map数组。长度为总数/20(子数组的长度)，向上取整
 	var ar []interface{} = make([]interface{}, int(math.Ceil(float64(c)/20.0)))
