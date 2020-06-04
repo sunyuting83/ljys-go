@@ -20,6 +20,7 @@ func Movie(c *gin.Context) {
 	}
 	b, m := MakeClassify()
 	data := makeMovie(intid)
+	hot := getHotLists(data.Cid)
 	newd := makeMovieDatas(data.Other)
 
 	c.JSON(http.StatusOK, gin.H{
@@ -39,6 +40,7 @@ func Movie(c *gin.Context) {
 		"profiles":  newd["profiles"],
 		"year":      newd["year"],
 		"score":     newd["score"],
+		"hotlist":   hot,
 	})
 }
 
@@ -50,6 +52,23 @@ func makeMovie(id int64) model.Movie {
 		fmt.Println("err")
 	}
 	return s
+}
+
+// getHotLists get hot list
+func getHotLists(cid int64) []MovieLs {
+	var (
+		hotlist model.MvMovie
+		data    []MovieLs
+	)
+	d, err := hotlist.HotLists(cid)
+	if err != nil {
+		fmt.Println("err")
+	}
+	for _, item := range d {
+		p := strTojson(item.Other)
+		data = append(data, MovieLs{ID: item.ID, Title: item.Title, Img: p.Img, Score: p.Score, Remarks: p.Remarks})
+	}
+	return data
 }
 
 // makeMovieData fun

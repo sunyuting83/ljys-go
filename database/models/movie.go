@@ -106,6 +106,18 @@ func (movie *Movie) Movies(id int64) (movies Movie, err error) {
 	return
 }
 
+// HotLists 列表
+func (index *MvMovie) HotLists(inid int64) (indexs []MvMovie, err error) {
+	if err = orm.Eloquent.
+		Select("id, cid, title, other").
+		Order("random()").
+		Limit(3).
+		Find(&indexs, "cid = ?", inid).Error; err != nil {
+		return
+	}
+	return
+}
+
 // makePage make page
 func makePage(p int64) int64 {
 	p = p - 1
