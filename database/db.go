@@ -22,7 +22,9 @@ func init() {
 	if DbErr != nil {
 		log.Fatal("error daabase")
 	}
+	//开启Dubug模式，酸爽
 	Eloquent.LogMode(true)
+
 	// 全局禁用表名复数
 	Eloquent.SingularTable(true)
 	// 如果设置为true,`User`的默认表名为`user`,使用`TableName`设置的表名不受影响
