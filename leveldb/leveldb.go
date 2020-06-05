@@ -2,6 +2,7 @@ package leveldb
 
 import (
 	"fmt"
+	utils "newapp/utils"
 	"sync"
 
 	"github.com/alash3al/redix/kvstore/leveldb"
@@ -23,7 +24,7 @@ var (
 
 func init() {
 
-	Leveldb, Errdb = leveldb.OpenLevelDB("/home/sun/Works/gopath/src/newapp/Cache")
+	Leveldb, Errdb = leveldb.OpenLevelDB(utils.GetDBPath("level", true))
 	if Errdb != nil {
 		fmt.Println(Errdb)
 	}
