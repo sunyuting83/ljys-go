@@ -27,15 +27,19 @@ func Tags(c *gin.Context) {
 	if cache == "leveldb: not found" {
 		b, m := MakeClassify()
 		data, name := getTags(id, ipage, path)
-		datas = gin.H{
-			"status":        0,
-			"menu":          b,
-			"menumore":      m,
-			"matched_route": path,
-			"movie":         data,
-			"c_name":        name,
+		if len(data) <= 0 {
+			data = make([]MovieLs, 0)
 		}
-		// leveldb.SetLevel(tname, jsonToStr(datas), 86400000)
+		datas = gin.H{
+			"status":   0,
+			"menu":     b,
+			"menumore": m,
+			"movie":    data,
+			"c_name":   name,
+		}
+		if len(data) > 0 {
+			leveldb.SetLevel(tname, jsonToStr(datas), 86400000)
+		}
 	} else {
 		datas = strToJsons(cache)
 	}
@@ -72,6 +76,7 @@ func getTags(id string, page int64, path string) (data []MovieLs, name string) {
 	if err != nil {
 		return data, ""
 	}
+	fmt.Println(data)
 
 	return data, name
 }
