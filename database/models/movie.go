@@ -44,9 +44,10 @@ type MvPerformer struct {
 
 // MvArea struct
 type MvArea struct {
-	ID    int64  `json:"id" gorm:"primary_key;column:id"`
-	AName string `json:"a_name" gorm:"column:a_name"`
-	Count int64  `json:"count" gorm:"column:count"`
+	ID    int64      `json:"id" gorm:"primary_key;column:id"`
+	AName string     `json:"a_name" gorm:"column:a_name"`
+	Count int64      `json:"count" gorm:"column:count"`
+	Movie []*MvMovie `gorm:"many2many:mv_area_mv_performer;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:mv_movie_id;jointable_foreignkey:mv_area_id;" json:"movie"`
 }
 
 // TableName change table name

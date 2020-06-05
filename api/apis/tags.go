@@ -26,7 +26,7 @@ func Tags(c *gin.Context) {
 	cache := leveldb.GetLevel(tname)
 	if cache == "leveldb: not found" {
 		b, m := MakeClassify()
-		data, name := getTags(id, ipage)
+		data, name := getTags(id, ipage, path)
 		datas = gin.H{
 			"status":        0,
 			"menu":          b,
@@ -43,18 +43,45 @@ func Tags(c *gin.Context) {
 }
 
 // makeMovieList make movie list for index
-func getTags(id string, page int64) (data []MovieLs, name string) {
+func getTags(id string, page int64, path string) (data []MovieLs, name string) {
 	var (
-		tags model.MvPerformer
+		a   model.MvArea
+		dir model.MvDirector
+		p   model.MvPerformer
+		err error
 	)
-	d, err := tags.TagLs(id, page)
+	switch path {
+	case "area":
+		a, err = a.TagALs(id, page)
+		name = a.AName
+		data = getMovieDDatag(a.Movie)
+	case "director":
+		dir, err = dir.TagDLs(id, page)
+		name = dir.DName
+		data = getMovieDDatag(dir.Movie)
+	case "performer":
+		p, err = p.TagPLs(id, page)
+		name = p.PName
+		data = getMovieDDatag(p.Movie)
+	default:
+		p, err = p.TagPLs(id, page)
+		name = p.PName
+		data = getMovieDDatag(p.Movie)
+		break
+	}
 	if err != nil {
 		return data, ""
 	}
 
-	for _, item := range d.Movie {
+	return data, name
+}
+
+// getMovieDData get Movie d data
+func getMovieDDatag(m []*model.MvMovie) []MovieLs {
+	var data []MovieLs
+	for _, item := range m {
 		p := strTojson(item.Other)
 		data = append(data, MovieLs{ID: item.ID, Title: item.Title, Img: p.Img, Score: p.Score, Remarks: p.Remarks})
 	}
-	return data, d.PName
+	return data
 }

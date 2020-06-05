@@ -5,8 +5,8 @@ import (
 	"strconv"
 )
 
-// TagLs 列表
-func (tag *MvPerformer) TagLs(id string, page int64) (tags MvPerformer, err error) {
+// TagPLs 列表
+func (tag *MvPerformer) TagPLs(id string, page int64) (tags MvPerformer, err error) {
 	// orm.Eloquent.Debug().First(&tags, id)
 	// if err = orm.Eloquent.
 	// 	Debug().
@@ -29,6 +29,28 @@ func (tag *MvPerformer) TagLs(id string, page int64) (tags MvPerformer, err erro
 		return
 	}
 	// fmt.Println(&tags)
+	return
+}
+
+// TagALs 列表
+func (tag *MvArea) TagALs(id string, page int64) (tags MvArea, err error) {
+	p := makePageS(page)
+	orm.Eloquent.First(&tags, id)
+	sql := `SELECT * FROM "mv_movie" INNER JOIN "mv_movie_mv_performer" ON "mv_movie_mv_performer"."mv_movie_id" = "mv_movie"."id" WHERE ("mv_movie_mv_performer"."mv_performer_id" IN ("` + id + `")) ` + ` ORDER BY "mv_movie"."id" DESC Limit 30 OFFSET ` + p
+	if err = orm.Eloquent.Raw(sql).Scan(&tags.Movie).Error; err != nil {
+		return
+	}
+	return
+}
+
+// TagDLs 列表
+func (tag *MvDirector) TagDLs(id string, page int64) (tags MvDirector, err error) {
+	p := makePageS(page)
+	orm.Eloquent.First(&tags, id)
+	sql := `SELECT * FROM "mv_movie" INNER JOIN "mv_movie_mv_performer" ON "mv_movie_mv_performer"."mv_movie_id" = "mv_movie"."id" WHERE ("mv_movie_mv_performer"."mv_performer_id" IN ("` + id + `")) ` + ` ORDER BY "mv_movie"."id" DESC Limit 30 OFFSET ` + p
+	if err = orm.Eloquent.Raw(sql).Scan(&tags.Movie).Error; err != nil {
+		return
+	}
 	return
 }
 
