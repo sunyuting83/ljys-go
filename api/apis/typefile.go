@@ -54,3 +54,9 @@ type Playlist struct {
 	Name string `json:"name"`
 	Path string `json:"page"`
 }
+
+// HotKey hot key
+type HotKey struct {
+	Key   string `json:"key"`
+	Click int64  `json:"click"`
+}

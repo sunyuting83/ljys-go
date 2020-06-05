@@ -5,11 +5,30 @@ import (
 	"net/http"
 	model "newapp/database/models"
 	leveldb "newapp/leveldb"
+	"sort"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 )
+
+// HotKeys s
+type HotKeys []HotKey
+
+//Len()
+func (s HotKeys) Len() int {
+	return len(s)
+}
+
+// Less 排序
+func (s HotKeys) Less(i, j int) bool {
+	return s[i].Click > s[j].Click
+}
+
+//Swap()
+func (s HotKeys) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
 
 // GetSearchKey 列表数据
 func GetSearchKey(c *gin.Context) {
@@ -66,12 +85,39 @@ func GetSearch(c *gin.Context) {
 		}
 		if len(data) > 0 {
 			leveldb.SetLevel(sname, SearchToStr(data), 21600000)
+			SaveHotKey(key)
 		}
 	} else {
 		data = SearchToJsons(cache)
+		SaveHotKey(key)
 	}
 
 	c.JSON(http.StatusOK, data)
+}
+
+// GetSearchHot fun
+func GetSearchHot(c *gin.Context) {
+	var (
+		datas  gin.H
+		list   model.MvMovie
+		data   []model.SearchKey
+		err    error
+		hotkey HotKeys
+	)
+	data, err = list.SearchHot()
+	if err != nil {
+		data = make([]model.SearchKey, 0)
+	}
+	if len(data) <= 0 {
+		data = make([]model.SearchKey, 0)
+	}
+	hotkey = GetHotKey()
+	datas = gin.H{
+		"status":  0,
+		"hotkey":  hotkey,
+		"hotlist": data,
+	}
+	c.JSON(http.StatusOK, datas)
 }
 
 // SearchKeyToJsons fun
@@ -112,4 +158,89 @@ func SearchToStr(d []MovieLs) (result string) {
 		return result
 	}
 	return result
+}
+
+// GetHotKey (hotkey map[]in)
+func GetHotKey() HotKeys {
+	var hotkey HotKeys
+	cache := leveldb.GetLevel("hotkey")
+	if cache == "leveldb: not found" {
+		return hotkey
+	}
+	hotkey = HotToJsons(cache)
+	if len(hotkey) >= 10 {
+		hotkey = hotkey[0:10]
+	}
+	return hotkey
+}
+
+// HotToJsons fun
+func HotToJsons(s string) HotKeys {
+	var result HotKeys
+	err := json.Unmarshal([]byte(s), &result)
+	if err != nil {
+		return result
+	}
+	return result
+}
+
+// HotToString fun
+func HotToString(d HotKeys) (result string) {
+	resultByte, errError := json.Marshal(d)
+	result = string(resultByte)
+	if errError != nil {
+		return result
+	}
+	return result
+}
+
+// SaveHotKey fun
+func SaveHotKey(key string) {
+	var (
+		hotkey HotKeys
+		check  bool
+		x      int
+	)
+	cache := leveldb.GetLevel("hotkey")
+	if cache == "leveldb: not found" {
+		hotkey = append(hotkey, HotKey{
+			Key:   key,
+			Click: 1,
+		})
+		leveldb.SetLevel("hotkey", HotToString(hotkey), -1)
+		return
+	}
+	hotkey = HotToJsons(cache)
+	check, x = ChecKey(hotkey, key)
+	if check {
+		hotkey[x].Click = hotkey[x].Click + 1
+		sort.Sort(hotkey)
+		leveldb.SetLevel("hotkey", HotToString(hotkey), -1)
+	} else {
+		hotkey = append(hotkey, HotKey{
+			Key:   key,
+			Click: 1,
+		})
+		sort.Sort(hotkey)
+		leveldb.SetLevel("hotkey", HotToString(hotkey), -1)
+	}
+	return
+}
+
+// ChecKey check key
+func ChecKey(arr HotKeys, k string) (bool, int) {
+	var (
+		c bool
+		x int
+	)
+	for i, item := range arr {
+		if item.Key == k {
+			c = true
+			x = i
+		} else {
+			c = false
+			x = 0
+		}
+	}
+	return c, x
 }

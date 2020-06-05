@@ -42,3 +42,15 @@ func (search *MvMovie) Search(key string, page int64) (searchs []MvMovie, err er
 	}
 	return
 }
+
+// SearchHot 列表
+func (search *MvMovie) SearchHot() (searchs []SearchKey, err error) {
+	if err = orm.Eloquent.
+		Select("id, title").
+		Order("random()").
+		Limit(10).
+		Find(&searchs).Error; err != nil {
+		return
+	}
+	return
+}

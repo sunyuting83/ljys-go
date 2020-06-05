@@ -24,7 +24,7 @@ var (
 
 func init() {
 
-	Leveldb, Errdb = leveldb.OpenLevelDB(utils.GetDBPath("level", true))
+	Leveldb, Errdb = leveldb.OpenLevelDB(utils.GetDBPath("level", false))
 	if Errdb != nil {
 		fmt.Println(Errdb)
 	}

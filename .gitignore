@@ -3,3 +3,4 @@ movie.sqlite
 test.go
 test
 Cache
+movie
