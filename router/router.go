@@ -18,6 +18,8 @@ func InitRouter() *gin.Engine {
 		api.GET("/area", apis.Tags)
 		api.GET("/director", apis.Tags)
 		api.GET("/performer", apis.Tags)
+		api.GET("/getkey", apis.GetSearchKey)
+		api.GET("/search", apis.GetSearch)
 	}
 
 	return router
