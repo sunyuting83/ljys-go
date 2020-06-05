@@ -23,7 +23,7 @@ var (
 
 func init() {
 
-	Leveldb, Errdb = leveldb.OpenLevelDB("/home/sun/Works/go/src/newapp/Cache")
+	Leveldb, Errdb = leveldb.OpenLevelDB("/home/sun/Works/gopath/src/newapp/Cache")
 	if Errdb != nil {
 		fmt.Println(Errdb)
 	}

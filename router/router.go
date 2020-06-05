@@ -15,6 +15,9 @@ func InitRouter() *gin.Engine {
 		api.GET("/getclass", apis.ClassLists)
 		api.GET("/list", apis.GetLists)
 		api.GET("/getmovie", apis.Movie)
+		api.GET("/area", apis.Tags)
+		api.GET("/director", apis.Tags)
+		api.GET("/performer", apis.Tags)
 	}
 
 	return router

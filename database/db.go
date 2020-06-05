@@ -15,7 +15,7 @@ var (
 
 func init() {
 	// Eloquent, err = gorm.Open("mysql", "root:root@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=True&loc=Local&timeout=10ms")
-	Eloquent, DbErr = gorm.Open("sqlite3", "/home/sun/Works/go/src/newapp/movie.sqlite")
+	Eloquent, DbErr = gorm.Open("sqlite3", "/home/sun/Works/gopath/src/newapp/movie.sqlite")
 	if DbErr != nil {
 		log.Fatal("error daabase")
 	}

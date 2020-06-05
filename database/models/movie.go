@@ -28,16 +28,18 @@ type Movie struct {
 
 // MvDirector struct
 type MvDirector struct {
-	ID    int64  `json:"id" gorm:"primary_key:true;column:id"`
-	DName string `json:"d_name" gorm:"column:d_name"`
-	Count int64  `json:"count" gorm:"column:count"`
+	ID    int64      `json:"id" gorm:"primary_key:true;column:id"`
+	DName string     `json:"d_name" gorm:"column:d_name"`
+	Count int64      `json:"count" gorm:"column:count"`
+	Movie []*MvMovie `gorm:"many2many:mv_director_mv_movie;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:mv_movie_id;jointable_foreignkey:mv_director_id;" json:"movie"`
 }
 
 // MvPerformer struct
 type MvPerformer struct {
-	ID    int64  `json:"id" gorm:"primary_key;column:id"`
-	PName string `json:"p_name" gorm:"column:p_name"`
-	Count int64  `json:"count" gorm:"column:count"`
+	ID    int64      `json:"id" gorm:"primary_key;column:id"`
+	PName string     `json:"p_name" gorm:"column:p_name"`
+	Count int64      `json:"count" gorm:"column:count"`
+	Movie []*MvMovie `gorm:"many2many:mv_movie_mv_performer;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:mv_movie_id;jointable_foreignkey:mv_performer_id;" json:"movie"`
 }
 
 // MvArea struct
