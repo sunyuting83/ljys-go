@@ -20,14 +20,18 @@ func Indexs(c *gin.Context) {
 	if cache == "leveldb: not found" {
 		b, m := MakeClassify()
 		data := makeMovieList(b)
-
+		if len(data) <= 0 {
+			data = make([]Movielist, 0)
+		}
 		datas = gin.H{
 			"status":    0,
 			"menu":      b,
 			"menumore":  m,
 			"movielist": data,
 		}
-		leveldb.SetLevel("index", jsonToStr(datas), 86400000)
+		if len(data) > 0 {
+			leveldb.SetLevel("index", jsonToStr(datas), 86400000)
+		}
 	} else {
 		datas = strToJsons(cache)
 	}

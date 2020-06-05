@@ -31,7 +31,9 @@ func GetLists(c *gin.Context) {
 			fmt.Println("err")
 		}
 		data := makeList(icid, ipage)
-
+		if len(data) <= 0 {
+			data = make([]MovieLs, 0)
+		}
 		datas = gin.H{
 			"status":   0,
 			"menu":     b,
@@ -39,7 +41,9 @@ func GetLists(c *gin.Context) {
 			"ctitle":   cname.CName,
 			"movies":   data,
 		}
-		leveldb.SetLevel(lname, jsonToStr(datas), 86400000)
+		if len(data) > 0 {
+			leveldb.SetLevel(lname, jsonToStr(datas), 86400000)
+		}
 	} else {
 		datas = strToJsons(cache)
 	}

@@ -24,14 +24,15 @@ func ClassLists(c *gin.Context) {
 	if cache == "leveldb: not found" {
 		b, m := MakeClassify()
 		data := makeClassList(intid)
-
 		datas = gin.H{
 			"status":    0,
 			"menu":      b,
 			"menumore":  m,
 			"movielist": data,
 		}
-		leveldb.SetLevel(cname, jsonToStr(datas), 86400000)
+		if len(data) > 0 {
+			leveldb.SetLevel(cname, jsonToStr(datas), 86400000)
+		}
 	} else {
 		datas = strToJsons(cache)
 	}
@@ -59,8 +60,12 @@ func makeClassData(i int64) []MovieLs {
 		data  []MovieLs
 	)
 	d, err := index.Classifys(i)
+
+	if len(d) <= 0 {
+		data = make([]MovieLs, 0)
+	}
 	if err != nil {
-		fmt.Println("err")
+		return data
 	}
 	for _, item := range d {
 		p := strTojson(item.Other)
