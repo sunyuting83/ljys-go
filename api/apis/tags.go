@@ -34,7 +34,7 @@ func Tags(c *gin.Context) {
 			"status":   0,
 			"menu":     b,
 			"menumore": m,
-			"movie":    data,
+			"movies":   data,
 			"c_title":  name,
 		}
 		if len(data) > 0 {
