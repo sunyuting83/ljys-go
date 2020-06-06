@@ -2,7 +2,6 @@ package apis
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	model "newapp/database/models"
 	leveldb "newapp/leveldb"
@@ -216,7 +215,7 @@ func SaveHotKey(key string) {
 		if h {
 			for i, item := range hotkey {
 				if item.Key == key {
-					fmt.Println(hotkey[i])
+					// fmt.Println(hotkey[i])
 					hotkey[i].Click = item.Click + 1
 					break
 				}
