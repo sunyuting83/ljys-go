@@ -35,7 +35,7 @@ func Tags(c *gin.Context) {
 			"menu":     b,
 			"menumore": m,
 			"movie":    data,
-			"c_name":   name,
+			"c_title":  name,
 		}
 		if len(data) > 0 {
 			leveldb.SetLevel(tname, jsonToStr(datas), 86400000)
