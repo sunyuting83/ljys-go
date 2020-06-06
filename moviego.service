@@ -4,8 +4,7 @@ After=network.target remote-fs.target nss-lookup.target
 
 [Service]
 Type=forking
-PIDFile=/home/works/node/movie/v2rss.pid
-ExecStart=/home/works/node/movie/startgo.sh
+ExecStart=/home/works/node/movie -p 5002
 ExecStop=/bin/kill -s HUP $MAINPID
 ExecReload=/bin/kill -s QUIT $MAINPID
 PrivateTmp=true
