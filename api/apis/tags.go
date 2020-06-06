@@ -76,7 +76,7 @@ func getTags(id string, page int64, path string) (data []MovieLs, name string) {
 	if err != nil {
 		return data, ""
 	}
-	fmt.Println(data)
+	// fmt.Println(data)
 
 	return data, name
 }

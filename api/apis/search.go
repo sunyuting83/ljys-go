@@ -2,6 +2,7 @@ package apis
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	model "newapp/database/models"
 	leveldb "newapp/leveldb"
@@ -112,6 +113,9 @@ func GetSearchHot(c *gin.Context) {
 		data = make([]model.SearchKey, 0)
 	}
 	hotkey = GetHotKey()
+	if len(hotkey) <= 0 {
+		hotkey = make(HotKeys, 0)
+	}
 	datas = gin.H{
 		"status":  0,
 		"hotkey":  hotkey,
@@ -198,8 +202,6 @@ func HotToString(d HotKeys) (result string) {
 func SaveHotKey(key string) {
 	var (
 		hotkey HotKeys
-		check  bool
-		x      int
 	)
 	cache := leveldb.GetLevel("hotkey")
 	if cache == "leveldb: not found" {
@@ -208,19 +210,23 @@ func SaveHotKey(key string) {
 			Click: 1,
 		})
 		leveldb.SetLevel("hotkey", HotToString(hotkey), -1)
-		return
-	}
-	hotkey = HotToJsons(cache)
-	check, x = ChecKey(hotkey, key)
-	if check {
-		hotkey[x].Click = hotkey[x].Click + 1
-		sort.Sort(hotkey)
-		leveldb.SetLevel("hotkey", HotToString(hotkey), -1)
 	} else {
-		hotkey = append(hotkey, HotKey{
-			Key:   key,
-			Click: 1,
-		})
+		hotkey = HotToJsons(cache)
+		h := ChecKey(hotkey, key)
+		if h {
+			for i, item := range hotkey {
+				if item.Key == key {
+					fmt.Println(hotkey[i])
+					hotkey[i].Click = item.Click + 1
+					break
+				}
+			}
+		} else {
+			hotkey = append(hotkey, HotKey{
+				Key:   key,
+				Click: 1,
+			})
+		}
 		sort.Sort(hotkey)
 		leveldb.SetLevel("hotkey", HotToString(hotkey), -1)
 	}
@@ -228,19 +234,11 @@ func SaveHotKey(key string) {
 }
 
 // ChecKey check key
-func ChecKey(arr HotKeys, k string) (bool, int) {
-	var (
-		c bool
-		x int
-	)
-	for i, item := range arr {
+func ChecKey(arr HotKeys, k string) bool {
+	for _, item := range arr {
 		if item.Key == k {
-			c = true
-			x = i
-		} else {
-			c = false
-			x = 0
+			return true
 		}
 	}
-	return c, x
+	return false
 }
