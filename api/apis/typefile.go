@@ -60,3 +60,10 @@ type HotKey struct {
 	Key   string `json:"key"`
 	Click int64  `json:"click"`
 }
+
+// Swiper struct
+type Swiper struct {
+	ID    string `json:"id"`
+	Img   string `json:"img"`
+	Title string `json:"title"`
+}

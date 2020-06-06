@@ -15,7 +15,19 @@ var classify model.MvClassify
 
 // Indexs 列表数据
 func Indexs(c *gin.Context) {
-	var datas gin.H
+	var (
+		datas  gin.H
+		swiper []Swiper
+		note   []string
+	)
+	sw := leveldb.GetLevel("swiper")
+	if sw == "leveldb: not found" {
+		swiper, note = MakeSwiperData()
+	} else {
+		nnn := leveldb.GetLevel("note")
+		note = NoteToJsons(nnn)
+		swiper = SwiperTojson(sw)
+	}
 	cache := leveldb.GetLevel("index")
 	if cache == "leveldb: not found" {
 		b, m := MakeClassify()
@@ -28,6 +40,8 @@ func Indexs(c *gin.Context) {
 			"menu":      b,
 			"menumore":  m,
 			"movielist": data,
+			"swiper":    swiper,
+			"notice":    note,
 		}
 		if len(data) > 0 {
 			leveldb.SetLevel("index", jsonToStr(datas), 86400000)
@@ -116,4 +130,21 @@ func jsonToStr(d gin.H) (result string) {
 		return result
 	}
 	return result
+}
+
+// NoteToJsons fun
+func NoteToJsons(s string) (result []string) {
+	if err := json.Unmarshal([]byte(s), &result); err != nil {
+		return
+	}
+	return
+}
+
+// SwiperTojson fun
+func SwiperTojson(s string) (p []Swiper) {
+	if err := json.Unmarshal([]byte(s), &p); err != nil {
+		// fmt.Println(err.Error())
+		return
+	}
+	return
 }
