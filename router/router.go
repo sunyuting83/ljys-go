@@ -2,6 +2,7 @@ package router
 
 import (
 	apis "newapp/api/apis"
+	utils "newapp/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,7 +11,7 @@ import (
 func InitRouter() *gin.Engine {
 	router := gin.Default()
 	api := router.Group("/api")
-	api.Use(CORSMiddleware())
+	api.Use(utils.CORSMiddleware())
 	{
 		api.GET("/index", apis.Indexs)
 		api.GET("/getclass", apis.ClassLists)
@@ -25,21 +26,4 @@ func InitRouter() *gin.Engine {
 	}
 
 	return router
-}
-
-// CORSMiddleware cors middleware
-func CORSMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "OPTIONS, GET")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-
-		c.Next()
-	}
 }
