@@ -35,7 +35,7 @@ func (search *MvMovie) Search(key string, page int64) (searchs []MvMovie, err er
 		Or("entitle LIKE ?", "%"+key+"%").
 		Select("id, title, other").
 		Order("id desc").
-		Limit(7).
+		Limit(15).
 		Offset(p).
 		Find(&searchs).Error; err != nil {
 		return
