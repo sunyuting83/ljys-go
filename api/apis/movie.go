@@ -22,7 +22,7 @@ func Movie(c *gin.Context) {
 	}
 
 	var datas gin.H
-	mname := strings.Join([]string{"list", id}, ":")
+	mname := strings.Join([]string{"movie", id}, ":")
 	cache := leveldb.GetLevel(mname)
 	if cache == "leveldb: not found" {
 		b, m := MakeClassify()
