@@ -14,3 +14,9 @@ func SetLevel(k string, v string, ttl int) {
 	Leveldb.Set(k, v, ttl)
 	return
 }
+
+// DelLevel del data
+func DelLevel(keys []string) {
+	Leveldb.Del(keys)
+	return
+}
