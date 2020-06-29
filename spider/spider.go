@@ -13,7 +13,7 @@ import (
 // main
 func main() {
 	var p int
-	flag.IntVar(&p, "p", 5, "分页，默认为50")
+	flag.IntVar(&p, "p", 5, "分页，默认为5")
 	flag.Parse()
 	list := makeList(p)
 	for _, url := range list {
