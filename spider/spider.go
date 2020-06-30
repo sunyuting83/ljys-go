@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"newapp/database/models"
 	"strconv"
 	"strings"
 )
@@ -21,7 +22,16 @@ func main() {
 		b, e := getData(url)
 		if e {
 			fmt.Println(b)
+			fmt.Println(getTopID("1"))
 		}
+	}
+}
+
+// makeMovieData
+func makeMovieData(list []MovieList) {
+	var movie models.MvMovie
+	for _, item := range list {
+
 	}
 }
 
@@ -70,4 +80,95 @@ func getData(u string) ([]MovieList, bool) {
 		return result.List, false
 	}
 	return result.List, true
+}
+
+// getTopID get top id
+func getTopID(id string) (gid int64) {
+	switch id {
+	case "5":
+		gid = 12
+		break
+	case "6":
+		gid = 13
+		break
+	case "7":
+		gid = 14
+		break
+	case "8":
+		gid = 15
+		break
+	case "9":
+		gid = 16
+		break
+	case "10":
+		gid = 18
+		break
+	case "11":
+		gid = 17
+		break
+	case "12":
+		gid = 5
+		break
+	case "13":
+		gid = 6
+		break
+	case "14":
+		gid = 9
+		break
+	case "15":
+		gid = 8
+		break
+	case "16":
+		gid = 7
+		break
+	case "17":
+		gid = 10
+		break
+	case "18":
+		gid = 11
+		break
+	case "19":
+		gid = 21
+		break
+	case "20":
+		gid = 20
+		break
+	case "21":
+		gid = 19
+		break
+	case "22":
+		gid = 22
+		break
+	case "23":
+		gid = 23
+		break
+	case "24":
+		gid = 24
+		break
+	case "25":
+		gid = 25
+		break
+	case "26":
+		gid = 26
+		break
+	case "27":
+		gid = 27
+		break
+	case "28":
+		gid = 28
+		break
+	case "29":
+		gid = 29
+		break
+	case "30":
+		gid = 30
+		break
+	case "31":
+		gid = 31
+		break
+	default:
+		gid = 22
+		break
+	}
+	return
 }
