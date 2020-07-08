@@ -6,38 +6,70 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"newapp/database/models"
 	"strconv"
 	"strings"
 )
 
+// OldData Old Data
+type OldData struct {
+	Code int         `json:"code"`
+	List []MovieList `json:"list"`
+}
+
+// MovieList Movie List
+type MovieList struct {
+	VodID       string `json:"vod_id"`
+	VodName     string `json:"vod_name"`
+	TypeID      string `json:"type_id"`
+	VodEn       string `json:"vod_en"`
+	VodPic      string `json:"vod_pic"`
+	VodPlayFrom string `json:"vod_play_from"`
+	VodDownFrom string `json:"vod_down_from"`
+	VodPlayurl  string `json:"vod_play_url"`
+	VodContent  string `json:"vod_content"`
+	VodYear     string `json:"vod_year"`
+	VodArea     string `json:"vod_area"`
+	VodLang     string `json:"vod_lang"`
+	TypeScore   string `json:"vod_score"`
+	VodDuration string `json:"vod_duration"`
+	VodRemarks  string `json:"vod_remarks"`
+}
+
 // main
 func main() {
-	var p int
+	var (
+		p int
+		c string
+	)
 	flag.IntVar(&p, "p", 5, "分页，默认为5")
+	flag.StringVar(&c, "c", "", "分页，默认为5")
 	flag.Parse()
-	list := makeList(p)
-	for _, url := range list {
-		fmt.Println(url)
-		b, e := getData(url)
-		if e {
-			fmt.Println(b)
-			fmt.Println(getTopID("1"))
+	if len(c) <= 0 {
+		fmt.Println(`配置文件参数不能为空，请使用 -c 配置文件路径`)
+	} else {
+		list := makeList(p)
+		for _, url := range list {
+			fmt.Println(url)
+			b, e := getData(url)
+			if e {
+				fmt.Println(b)
+				fmt.Println(getTopID("1"))
+			}
 		}
 	}
 }
 
 // makeMovieData
-func makeMovieData(list []MovieList) {
-	var movie models.MvMovie
-	for _, item := range list {
+// func makeMovieData(list []MovieList) {
+// 	var movie models.MvMovie
+// 	for _, item := range list {
 
-	}
-}
+// 	}
+// }
 
 // makeList
 func makeList(p int) []string {
-	var rturl string = "http://cj.wlzy.tv/api/macs/vod/?ac=detail&pg="
+	var rturl string = "https://www.mhapi123.com/inc/api_mac10.php?ac=detail&pg="
 	var listurls []string
 	if p <= 0 {
 		p = 1
