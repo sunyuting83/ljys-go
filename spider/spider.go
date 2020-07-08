@@ -47,13 +47,14 @@ func main() {
 	if len(c) <= 0 {
 		fmt.Println(`配置文件参数不能为空，请使用 -c 配置文件路径`)
 	} else {
+		// 先读取配置文件 传入url获取到列表
 		list := makeList(p)
 		for _, url := range list {
 			fmt.Println(url)
 			b, e := getData(url)
 			if e {
 				fmt.Println(b)
-				fmt.Println(getTopID("1"))
+				fmt.Println(getTopID("1")) //传入id对应获取到分类id
 			}
 		}
 	}
