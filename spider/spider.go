@@ -148,7 +148,7 @@ func getData(u string) ([]MovieList, bool) {
 func MakeData(b []MovieList, l []ConfigList, z bool, id string) {
 	for _, item := range b {
 		classifyid := getTopID(item.TypeID, l, z, item.VodArea, id) //传入id对应获取到分类id
-		fmt.Println(classifyid)
+		fmt.Println(classifyid, item.VodName)
 	}
 	return
 }
@@ -157,7 +157,7 @@ func MakeData(b []MovieList, l []ConfigList, z bool, id string) {
 func getTopID(id string, l []ConfigList, z bool, area string, i string) (gid int64) {
 	if z {
 		for _, item := range l {
-			if item.ID == i {
+			if id == i {
 				return getFID(area)
 			} else if item.ID == id {
 				return item.SID
