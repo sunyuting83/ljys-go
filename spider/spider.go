@@ -38,6 +38,8 @@ type MovieList struct {
 // ConfigFile Config File
 type ConfigFile struct {
 	URI  string       `json:"uri"`
+	ZYFL bool         `json:"zyfl"`
+	ZYID string       `json:"zyid"`
 	List []ConfigList `json:"list"`
 }
 
@@ -72,7 +74,7 @@ func main() {
 			b, e := getData(url)
 			if e {
 				// fmt.Println(b)
-				MakeData(b, config.List)
+				MakeData(b, config.List, config.ZYFL, config.ZYID)
 			}
 		}
 	}
@@ -143,18 +145,56 @@ func getData(u string) ([]MovieList, bool) {
 }
 
 // MakeData make data
-func MakeData(b []MovieList, l []ConfigList) {
+func MakeData(b []MovieList, l []ConfigList, z bool, id string) {
 	for _, item := range b {
-		fmt.Println(getTopID(item.TypeID, l)) //传入id对应获取到分类id
+		fmt.Println(getTopID(item.TypeID, l, z, item.VodArea, id)) //传入id对应获取到分类id
 	}
 }
 
 // getTopID get top id
-func getTopID(id string, l []ConfigList) (gid int64) {
-	for _, item := range l {
-		if item.ID == id {
-			return item.SID
+func getTopID(id string, l []ConfigList, z bool, area string, i string) (gid int64) {
+	if z {
+		for _, item := range l {
+			if item.ID == i {
+				return getFID(area)
+			} else if item.ID == id {
+				return item.SID
+			}
 		}
+	} else {
+		for _, item := range l {
+			if item.ID == id {
+				return item.SID
+			}
+		}
+	}
+	return
+}
+
+// getFID get f id
+func getFID(area string) (gid int64) {
+	switch area {
+	case "美国":
+		gid = 26
+		break
+	case "台湾":
+		gid = 24
+		break
+	case "香港":
+		gid = 24
+		break
+	case "大陆":
+		gid = 23
+		break
+	case "韩国":
+		gid = 25
+		break
+	case "日本":
+		gid = 25
+		break
+	default:
+		gid = 26
+		break
 	}
 	return
 }
