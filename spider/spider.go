@@ -35,6 +35,18 @@ type MovieList struct {
 	VodRemarks  string `json:"vod_remarks"`
 }
 
+// ConfigFile Config File
+type ConfigFile struct {
+	URI  string       `json:"uri"`
+	List []ConfigList `json:"list"`
+}
+
+// ConfigList Config List
+type ConfigList struct {
+	ID  string `json:"id"`
+	SID int64  `json:"sid"`
+}
+
 // main
 func main() {
 	var (
@@ -45,19 +57,34 @@ func main() {
 	flag.StringVar(&c, "c", "", "分页，默认为5")
 	flag.Parse()
 	if len(c) <= 0 {
-		fmt.Println(`配置文件参数不能为空，请使用 -c 配置文件路径`)
+		fmt.Println("\x1B[31m配置文件参数不能为空，请使用 -c 配置文件路径\x1B[0m")
 	} else {
+		data, err := ioutil.ReadFile(c)
+		if err != nil {
+			fmt.Println("\x1B[31m错误：配置文件路径错误\x1B[0m")
+			return
+		}
+		config := ConfigTojson(data)
 		// 先读取配置文件 传入url获取到列表
-		list := makeList(p)
+		list := makeList(p, config.URI)
 		for _, url := range list {
 			fmt.Println(url)
 			b, e := getData(url)
 			if e {
-				fmt.Println(b)
-				fmt.Println(getTopID("1")) //传入id对应获取到分类id
+				// fmt.Println(b)
+				MakeData(b, config.List)
 			}
 		}
 	}
+}
+
+// ConfigTojson fun
+func ConfigTojson(s []byte) (p ConfigFile) {
+	if err := json.Unmarshal([]byte(s), &p); err != nil {
+		// fmt.Println(err.Error())
+		return
+	}
+	return
 }
 
 // makeMovieData
@@ -69,8 +96,8 @@ func main() {
 // }
 
 // makeList
-func makeList(p int) []string {
-	var rturl string = "https://www.mhapi123.com/inc/api_mac10.php?ac=detail&pg="
+func makeList(p int, url string) []string {
+	var rturl string = url
 	var listurls []string
 	if p <= 0 {
 		p = 1
@@ -115,93 +142,19 @@ func getData(u string) ([]MovieList, bool) {
 	return result.List, true
 }
 
+// MakeData make data
+func MakeData(b []MovieList, l []ConfigList) {
+	for _, item := range b {
+		fmt.Println(getTopID(item.TypeID, l)) //传入id对应获取到分类id
+	}
+}
+
 // getTopID get top id
-func getTopID(id string) (gid int64) {
-	switch id {
-	case "5":
-		gid = 12
-		break
-	case "6":
-		gid = 13
-		break
-	case "7":
-		gid = 14
-		break
-	case "8":
-		gid = 15
-		break
-	case "9":
-		gid = 16
-		break
-	case "10":
-		gid = 18
-		break
-	case "11":
-		gid = 17
-		break
-	case "12":
-		gid = 5
-		break
-	case "13":
-		gid = 6
-		break
-	case "14":
-		gid = 9
-		break
-	case "15":
-		gid = 8
-		break
-	case "16":
-		gid = 7
-		break
-	case "17":
-		gid = 10
-		break
-	case "18":
-		gid = 11
-		break
-	case "19":
-		gid = 21
-		break
-	case "20":
-		gid = 20
-		break
-	case "21":
-		gid = 19
-		break
-	case "22":
-		gid = 22
-		break
-	case "23":
-		gid = 23
-		break
-	case "24":
-		gid = 24
-		break
-	case "25":
-		gid = 25
-		break
-	case "26":
-		gid = 26
-		break
-	case "27":
-		gid = 27
-		break
-	case "28":
-		gid = 28
-		break
-	case "29":
-		gid = 29
-		break
-	case "30":
-		gid = 30
-		break
-	case "31":
-		gid = 31
-		break
-	default:
-		gid = 22
-		break
+func getTopID(id string, l []ConfigList) (gid int64) {
+	for _, item := range l {
+		if item.ID == id {
+			return item.SID
+		}
 	}
 	return
 }
