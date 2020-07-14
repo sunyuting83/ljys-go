@@ -147,8 +147,10 @@ func getData(u string) ([]MovieList, bool) {
 // MakeData make data
 func MakeData(b []MovieList, l []ConfigList, z bool, id string) {
 	for _, item := range b {
-		fmt.Println(getTopID(item.TypeID, l, z, item.VodArea, id)) //传入id对应获取到分类id
+		classifyid := getTopID(item.TypeID, l, z, item.VodArea, id) //传入id对应获取到分类id
+		fmt.Println(classifyid)
 	}
+	return
 }
 
 // getTopID get top id
