@@ -155,7 +155,9 @@ func getData(u string) ([]MovieList, bool) {
 func MakeData(b []MovieList, l []ConfigList, z bool, id string, areas []ConfigArea) {
 	for _, item := range b {
 		classifyid := getTopID(item.TypeID, l, z, item.VodArea, id, areas) //传入id对应获取到分类id
-		fmt.Println(classifyid, item.VodName)
+		fmt.Println(classifyid)
+		fmt.Println(item)
+		// VodPlayurl $分割文字与播放地址 #分割多集
 	}
 	return
 }
@@ -186,6 +188,7 @@ func getFID(area string, areas []ConfigArea) (gid int64) {
 		if area == item.NAME {
 			return item.ID
 		}
+		return areas[0].ID
 	}
-	return areas[0].ID
+	return
 }
