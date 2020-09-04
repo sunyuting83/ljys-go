@@ -41,12 +41,19 @@ type ConfigFile struct {
 	ZYFL bool         `json:"zyfl"`
 	ZYID string       `json:"zyid"`
 	List []ConfigList `json:"list"`
+	AREA []ConfigArea `json:"area"`
 }
 
 // ConfigList Config List
 type ConfigList struct {
 	ID  string `json:"id"`
 	SID int64  `json:"sid"`
+}
+
+// ConfigArea config area
+type ConfigArea struct {
+	NAME string `json:"name"`
+	ID   int64  `json:"id"`
 }
 
 // main
@@ -74,7 +81,7 @@ func main() {
 			b, e := getData(url)
 			if e {
 				// fmt.Println(b)
-				MakeData(b, config.List, config.ZYFL, config.ZYID)
+				MakeData(b, config.List, config.ZYFL, config.ZYID, config.AREA)
 			}
 		}
 	}
@@ -145,20 +152,20 @@ func getData(u string) ([]MovieList, bool) {
 }
 
 // MakeData make data
-func MakeData(b []MovieList, l []ConfigList, z bool, id string) {
+func MakeData(b []MovieList, l []ConfigList, z bool, id string, areas []ConfigArea) {
 	for _, item := range b {
-		classifyid := getTopID(item.TypeID, l, z, item.VodArea, id) //传入id对应获取到分类id
+		classifyid := getTopID(item.TypeID, l, z, item.VodArea, id, areas) //传入id对应获取到分类id
 		fmt.Println(classifyid, item.VodName)
 	}
 	return
 }
 
 // getTopID get top id
-func getTopID(id string, l []ConfigList, z bool, area string, i string) (gid int64) {
+func getTopID(id string, l []ConfigList, z bool, area string, i string, areas []ConfigArea) (gid int64) {
 	if z {
 		for _, item := range l {
 			if id == i {
-				return getFID(area)
+				return getFID(area, areas)
 			} else if item.ID == id {
 				return item.SID
 			}
@@ -174,29 +181,11 @@ func getTopID(id string, l []ConfigList, z bool, area string, i string) (gid int
 }
 
 // getFID get f id
-func getFID(area string) (gid int64) {
-	switch area {
-	case "美国":
-		gid = 26
-		break
-	case "台湾":
-		gid = 24
-		break
-	case "香港":
-		gid = 24
-		break
-	case "大陆":
-		gid = 23
-		break
-	case "韩国":
-		gid = 25
-		break
-	case "日本":
-		gid = 25
-		break
-	default:
-		gid = 26
-		break
+func getFID(area string, areas []ConfigArea) (gid int64) {
+	for _, item := range areas {
+		if area == item.NAME {
+			return item.ID
+		}
 	}
-	return
+	return areas[0].ID
 }
