@@ -21,7 +21,7 @@ type MovieList struct {
 	VodID       string `json:"vod_id"`
 	VodName     string `json:"vod_name"`
 	TypeID      string `json:"type_id"`
-	VodEn       string `json:"vod_en"`
+	VodEn       string `json:"vod_enname"`
 	VodPic      string `json:"vod_pic"`
 	VodPlayFrom string `json:"vod_play_from"`
 	VodDownFrom string `json:"vod_down_from"`
@@ -32,7 +32,9 @@ type MovieList struct {
 	VodLang     string `json:"vod_lang"`
 	TypeScore   string `json:"vod_score"`
 	VodDuration string `json:"vod_duration"`
-	VodRemarks  string `json:"vod_remarks"`
+	VodRemarks  string `json:"vod_remark"`
+	VodDirector string `json:"vod_director"`
+	VodActor    string `json:"vod_actor"`
 }
 
 // ConfigFile Config File
@@ -66,6 +68,28 @@ type PlayerList struct {
 type PlayerContent struct {
 	NAME string `json:"name"`
 	Path string `json:"path"`
+}
+
+// SaveData save data
+type SaveData struct {
+	CID     int64  `json:"cid"`
+	Title   string `json:"title"`
+	EnTitle string `json:"entitle"`
+	Other   string `json:"other"`
+}
+
+// OtherData other data
+type OtherData struct {
+	Img       string     `json:"img"`
+	Profiles  string     `json:"profiles"`
+	PlayPath  PlayerList `json:"play_path"`
+	Score     string     `json:"score"`
+	Remarks   string     `json:"remarks"`
+	Year      string     `json:"year"`
+	Languarge string     `json:"languarge"`
+	Performer []string   `json:"performer"`
+	Area      []string   `json:"area"`
+	Director  []string   `json:"director"`
 }
 
 // main
@@ -166,11 +190,33 @@ func getData(u string) ([]MovieList, bool) {
 // MakeData make data
 func MakeData(b []MovieList, l []ConfigList, z bool, id string, areas []ConfigArea) {
 	for _, item := range b {
+		var (
+			saveData  SaveData
+			otherData OtherData
+		)
 		classifyid := getTopID(item.TypeID, l, z, item.VodArea, id, areas) //传入id对应获取到分类id
-		fmt.Println(classifyid)
-		// fmt.Println(item)
+		saveData.CID = classifyid
+		saveData.Title = item.VodName
+		saveData.EnTitle = item.VodEn
+
 		player := makePlayer(item.VodPlayurl)
-		fmt.Println(player)
+		otherData.Img = item.VodPic
+		otherData.Profiles = strings.TrimSpace(item.VodContent)
+		otherData.PlayPath = player
+		otherData.Score = item.TypeScore
+		otherData.Remarks = item.VodRemarks
+		otherData.Year = item.VodYear
+		otherData.Languarge = item.VodLang
+		otherData.Performer = makeArr(item.VodActor)
+		otherData.Area = makeArr(item.VodArea)
+		otherData.Director = makeArr(item.VodDirector)
+
+		other := otherJSONToStr(otherData)
+
+		saveData.Other = other
+		// fmt.Println(saveData)
+		// fmt.Println(player)
+		fmt.Println(saveData)
 		// VodPlayurl $分割文字与播放地址 #分割多集
 	}
 	return
@@ -212,6 +258,8 @@ func makePlayer(p string) (player PlayerList) {
 	var (
 		data PlayerList
 	)
+	data.HLS = make([]PlayerContent, 0)
+	data.Player = make([]PlayerContent, 0)
 	if strings.Contains(p, "$") {
 		list := strings.Split(p, "#")
 		for _, item := range list {
@@ -227,4 +275,41 @@ func makePlayer(p string) (player PlayerList) {
 		}
 	}
 	return data
+}
+
+// otherJSONToStr fun
+func otherJSONToStr(d OtherData) (result string) {
+	resultByte, errError := json.Marshal(d)
+	result = string(resultByte)
+	if errError != nil {
+		return result
+	}
+	return result
+}
+
+// makeArr fun
+func makeArr(a string) (arr []string) {
+	if len(a) != 0 {
+		b := strings.Contains(a, ",")
+		c := strings.Contains(a, "/")
+		d := strings.Contains(a, "，")
+		e := strings.Contains(a, "、")
+		if b {
+			arr = strings.Split(a, ",")
+		} else if c {
+			arr = strings.Split(a, "/")
+		} else if d {
+			arr = strings.Split(a, "，")
+		} else if e {
+			arr = strings.Split(a, "、")
+		} else {
+			arr = append(arr, a)
+		}
+		for _, item := range arr {
+			strings.TrimSpace(item)
+		}
+		return
+	}
+	arr = append(arr, "其他")
+	return
 }
