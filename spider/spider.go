@@ -56,6 +56,18 @@ type ConfigArea struct {
 	ID   int64  `json:"id"`
 }
 
+// PlayerList player list
+type PlayerList struct {
+	HLS    []PlayerContent `json:"hls"`
+	Player []PlayerContent `json:"player"`
+}
+
+// PlayerContent player content
+type PlayerContent struct {
+	NAME string `json:"name"`
+	Path string `json:"path"`
+}
+
 // main
 func main() {
 	var (
@@ -156,7 +168,9 @@ func MakeData(b []MovieList, l []ConfigList, z bool, id string, areas []ConfigAr
 	for _, item := range b {
 		classifyid := getTopID(item.TypeID, l, z, item.VodArea, id, areas) //传入id对应获取到分类id
 		fmt.Println(classifyid)
-		fmt.Println(item)
+		// fmt.Println(item)
+		player := makePlayer(item.VodPlayurl)
+		fmt.Println(player)
 		// VodPlayurl $分割文字与播放地址 #分割多集
 	}
 	return
@@ -191,4 +205,26 @@ func getFID(area string, areas []ConfigArea) (gid int64) {
 		return areas[0].ID
 	}
 	return
+}
+
+// Make Player
+func makePlayer(p string) (player PlayerList) {
+	var (
+		data PlayerList
+	)
+	if strings.Contains(p, "$") {
+		list := strings.Split(p, "#")
+		for _, item := range list {
+			namep := strings.Split(item, "$")
+			blen := len(namep[1])
+			b := strings.LastIndex(namep[1], ".")
+			types := namep[1][b+1 : blen]
+			if types == "m3u8" {
+				data.HLS = append(data.HLS, PlayerContent{NAME: namep[0], Path: namep[1]})
+			} else {
+				data.Player = append(data.Player, PlayerContent{NAME: namep[0], Path: namep[1]})
+			}
+		}
+	}
+	return data
 }
