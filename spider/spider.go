@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	ignore "newapp/ignore"
 )
 
 // OldData Old Data
@@ -216,7 +218,12 @@ func MakeData(b []MovieList, l []ConfigList, z bool, id string, areas []ConfigAr
 		saveData.Other = other
 		// fmt.Println(saveData)
 		// fmt.Println(player)
-		fmt.Println(saveData)
+		ig := ignore.GetLevel(item.VodID)
+		if ig == "leveldb: not found" {
+			fmt.Println("updatae")
+		} else {
+			fmt.Println(saveData)
+		}
 		// VodPlayurl $分割文字与播放地址 #分割多集
 	}
 	return

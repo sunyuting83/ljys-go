@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,6 +26,9 @@ func GetDBPath(t string, d bool) string {
 	p = "movie.sqlite"
 	if t == "level" {
 		p = "Cache"
+	}
+	if t == "spider" {
+		p = "IgnoreDB"
 	}
 	return strings.Join([]string{dir, p}, "/")
 }
