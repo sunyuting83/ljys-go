@@ -219,17 +219,17 @@ func MakeData(b []MovieList, l []ConfigList, z bool, id int64, areas []ConfigAre
 
 		other := otherJSONToStr(otherData)
 
-		saveData := &SaveData{
-			CID:     classifyid,
-			Title:   item.VodName,
-			EnTitle: item.VodEn,
-			Other:   other,
-		}
+		// saveData := &SaveData{
+		// 	CID:     classifyid,
+		// 	Title:   item.VodName,
+		// 	EnTitle: item.VodEn,
+		// 	Other:   other,
+		// }
 		// fmt.Println(saveData)
 		// fmt.Println(player)
 		ig := ignore.GetLevel(md5V(item.VodName))
 		if ig == "leveldb: not found" {
-			fmt.Println(saveData)
+			fmt.Println("sdfsdf")
 		} else {
 			oid, err := strconv.ParseInt(ig, 10, 64)
 			if err != nil {
@@ -283,11 +283,39 @@ func getFID(area string, areas []ConfigArea) (gid int64) {
 // Make Player
 func makePlayer(p string) (player PlayerList) {
 	var (
-		data PlayerList
+		data  PlayerList
+		namep []string
+		blen  int
+		b     int
+		types string
 	)
 	data.HLS = make([]PlayerContent, 0)
 	data.Player = make([]PlayerContent, 0)
-	if strings.Contains(p, "$") {
+	if strings.Contains(p, "$$$") {
+		play := strings.Split(p, "$$$")
+		for _, ps := range play {
+			list := strings.Split(ps, "#")
+			for _, item := range list {
+				if strings.Contains(item, "$") {
+					namep = strings.Split(item, "$")
+					blen = len(namep[1])
+					b = strings.LastIndex(namep[1], ".")
+					types = namep[1][b+1 : blen]
+				} else {
+					namep = strings.Split(item, "http")
+					newurl := strings.Join([]string{"http", namep[1]}, "")
+					blen = len(newurl)
+					b = strings.LastIndex(newurl, ".")
+					types = newurl[b+1 : blen]
+				}
+				if types == "m3u8" {
+					data.HLS = append(data.HLS, PlayerContent{NAME: namep[0], Path: namep[1]})
+				} else {
+					data.Player = append(data.Player, PlayerContent{NAME: namep[0], Path: namep[1]})
+				}
+			}
+		}
+	} else {
 		list := strings.Split(p, "#")
 		for _, item := range list {
 			namep := strings.Split(item, "$")
