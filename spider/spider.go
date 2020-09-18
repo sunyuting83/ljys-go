@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/md5"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -74,6 +75,15 @@ type PlayerContent struct {
 
 // SaveData save data
 type SaveData struct {
+	CID     int64  `json:"cid"`
+	Title   string `json:"title"`
+	EnTitle string `json:"entitle"`
+	Other   string `json:"other"`
+}
+
+// UpData save data
+type UpData struct {
+	ID      int64  `json:"id"`
 	CID     int64  `json:"cid"`
 	Title   string `json:"title"`
 	EnTitle string `json:"entitle"`
@@ -192,37 +202,47 @@ func getData(u string) ([]MovieList, bool) {
 // MakeData make data
 func MakeData(b []MovieList, l []ConfigList, z bool, id string, areas []ConfigArea) {
 	for _, item := range b {
-		var (
-			saveData  SaveData
-			otherData OtherData
-		)
 		classifyid := getTopID(item.TypeID, l, z, item.VodArea, id, areas) //传入id对应获取到分类id
-		saveData.CID = classifyid
-		saveData.Title = item.VodName
-		saveData.EnTitle = item.VodEn
 
 		player := makePlayer(item.VodPlayurl)
-		otherData.Img = item.VodPic
-		otherData.Profiles = strings.TrimSpace(item.VodContent)
-		otherData.PlayPath = player
-		otherData.Score = item.TypeScore
-		otherData.Remarks = item.VodRemarks
-		otherData.Year = item.VodYear
-		otherData.Languarge = item.VodLang
-		otherData.Performer = makeArr(item.VodActor)
-		otherData.Area = makeArr(item.VodArea)
-		otherData.Director = makeArr(item.VodDirector)
+		otherData := &OtherData{Img: item.VodPic,
+			Profiles:  strings.TrimSpace(item.VodContent),
+			PlayPath:  player,
+			Score:     item.TypeScore,
+			Remarks:   item.VodRemarks,
+			Year:      item.VodYear,
+			Languarge: item.VodLang,
+			Performer: makeArr(item.VodActor),
+			Area:      makeArr(item.VodArea),
+			Director:  makeArr(item.VodDirector),
+		}
 
 		other := otherJSONToStr(otherData)
 
-		saveData.Other = other
+		saveData := &SaveData{
+			CID:     classifyid,
+			Title:   item.VodName,
+			EnTitle: item.VodEn,
+			Other:   other,
+		}
 		// fmt.Println(saveData)
 		// fmt.Println(player)
-		ig := ignore.GetLevel(item.VodID)
+		ig := ignore.GetLevel(md5V(item.VodName))
 		if ig == "leveldb: not found" {
-			fmt.Println("updatae")
-		} else {
 			fmt.Println(saveData)
+		} else {
+			oid, err := strconv.ParseInt(ig, 10, 64)
+			if err != nil {
+				return
+			}
+			updata := &UpData{
+				ID:      oid,
+				CID:     classifyid,
+				Title:   item.VodName,
+				EnTitle: item.VodEn,
+				Other:   other,
+			}
+			fmt.Println(updata)
 		}
 		// VodPlayurl $分割文字与播放地址 #分割多集
 	}
@@ -285,7 +305,7 @@ func makePlayer(p string) (player PlayerList) {
 }
 
 // otherJSONToStr fun
-func otherJSONToStr(d OtherData) (result string) {
+func otherJSONToStr(d *OtherData) (result string) {
 	resultByte, errError := json.Marshal(d)
 	result = string(resultByte)
 	if errError != nil {
@@ -319,4 +339,12 @@ func makeArr(a string) (arr []string) {
 	}
 	arr = append(arr, "其他")
 	return
+}
+
+// md5V func
+func md5V(str string) string {
+	data := []byte(str)
+	has := md5.Sum(data)
+	md5str := fmt.Sprintf("%x", has)
+	return md5str
 }
