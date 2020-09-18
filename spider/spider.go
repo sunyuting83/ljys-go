@@ -219,17 +219,17 @@ func MakeData(b []MovieList, l []ConfigList, z bool, id int64, areas []ConfigAre
 
 		other := otherJSONToStr(otherData)
 
-		// saveData := &SaveData{
-		// 	CID:     classifyid,
-		// 	Title:   item.VodName,
-		// 	EnTitle: item.VodEn,
-		// 	Other:   other,
-		// }
+		saveData := &SaveData{
+			CID:     classifyid,
+			Title:   item.VodName,
+			EnTitle: item.VodEn,
+			Other:   other,
+		}
 		// fmt.Println(saveData)
 		// fmt.Println(player)
 		ig := ignore.GetLevel(md5V(item.VodName))
 		if ig == "leveldb: not found" {
-			fmt.Println("sdfsdf")
+			fmt.Println(saveData)
 		} else {
 			oid, err := strconv.ParseInt(ig, 10, 64)
 			if err != nil {
