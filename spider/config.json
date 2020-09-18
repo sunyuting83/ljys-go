@@ -1,131 +1,132 @@
 {
-  "uri":"https://www.mhapi123.com/inc/api_mac10.php?ac=detail&pg=",
-  "zyfl": true,
-  "zyid": "3",
+  "uri":"https://api.tiankongapi.com/api.php/provide/vod/?ac=detail&pg=",
+  "zyfl": false,
+  "zyid": 3,
   "list":[
     {
-      "id":"5",
-      "sid": 12
+      "id":11,
+      "sid": 12,
+      "dname": "动作"
     },
     {
-      "id":"6",
-      "sid": 13
+      "id":7,
+      "sid": 13,
+      "dname": "喜剧"
     },
     {
-      "id":"7",
-      "sid": 14
+      "id":8,
+      "sid": 14,
+      "dname": "爱情"
     },
     {
-      "id":"8",
-      "sid": 15
+      "id":9,
+      "sid": 15,
+      "dname": "科幻"
     },
     {
-      "id":"9",
-      "sid": 16
+      "id":10,
+      "sid": 16,
+      "dname": "恐怖"
     },
     {
-      "id":"10",
-      "sid": 18
+      "id":21,
+      "sid": 18,
+      "dname": "剧情"
     },
     {
-      "id":"11",
-      "sid": 17
+      "id":12,
+      "sid": 17,
+      "dname": "战争"
     },
     {
-      "id":"20",
-      "sid": 21
+      "id":32,
+      "sid": 21,
+      "dname": "纪录片"
     },
     {
-      "id":"41",
-      "sid": 20
+      "id":20,
+      "sid": 20,
+      "dname": "微电影"
     },
     {
-      "id":"12",
-      "sid": 5
+      "id":13,
+      "sid": 5,
+      "dname": "国产剧"
     },
     {
-      "id":"16",
-      "sid": 6
+      "id":14,
+      "sid": 6,
+      "dname": "香港剧"
     },
     {
-      "id":"13",
-      "sid": 7
+      "id":15,
+      "sid": 7,
+      "dname": "台湾剧"
     },
     {
-      "id":"14",
-      "sid": 9
+      "id":26,
+      "sid": 9,
+      "dname": "韩国剧"
     },
     {
-      "id":"15",
-      "sid": 8
+      "id":16,
+      "sid": 8,
+      "dname": "欧美剧"
     },
     {
-      "id":"17",
-      "sid": 11
+      "id":25,
+      "sid": 11,
+      "dname": "海外剧"
     },
     {
-      "id":"18",
-      "sid": 10
+      "id":24,
+      "sid": 10,
+      "dname": "日本剧"
     },
     {
-      "id":"54",
-      "sid": 11
+      "id": 39,
+      "sid": 20,
+      "dname": "电影解说"
     },
     {
-      "id":"20",
-      "sid": 21
+      "id":33,
+      "sid": 23,
+      "dname": "内地综艺"
     },
     {
-      "id":"43",
-      "sid": 20
+      "id":36,
+      "sid": 24,
+      "dname": "港台综艺"
     },
     {
-      "id":"44",
-      "sid": 20
+      "id":34,
+      "sid": 25,
+      "dname": "日韩综艺"
     },
     {
-      "id":"45",
-      "sid": 20
+      "id":37,
+      "sid": 26,
+      "dname": "欧美综艺"
     },
     {
-      "id":"46",
-      "sid": 20
+      "id":29,
+      "sid": 28,
+      "dname": "日韩动漫"
     },
     {
-      "id":"48",
-      "sid": 20
+      "id":28,
+      "sid": 27,
+      "dname": "国产动漫"
     },
     {
-      "id":"19",
-      "sid": 22
+      "id":30,
+      "sid": 29,
+      "dname": "欧美动漫"
     },
     {
-      "id":"51",
-      "sid": 19
-    },
-    {
-      "id":"52",
-      "sid": 19
-    },
-    {
-      "id":"53",
-      "sid": 19
-    },
-    {
-      "id":"39",
-      "sid": 28
-    },
-    {
-      "id":"40",
-      "sid": 27
-    },
-    {
-      "id":"47",
-      "sid": 29
-    },
-    {
-      "id":"42",
-      "sid": 30
+      "id":31,
+      "sid": 31,
+      "dname": "海外动漫"
     }
   ],
   "area": [

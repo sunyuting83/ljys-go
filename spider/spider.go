@@ -21,10 +21,10 @@ type OldData struct {
 
 // MovieList Movie List
 type MovieList struct {
-	VodID       string `json:"vod_id"`
+	VodID       int64  `json:"vod_id"`
 	VodName     string `json:"vod_name"`
-	TypeID      string `json:"type_id"`
-	VodEn       string `json:"vod_enname"`
+	TypeID      int64  `json:"type_id"`
+	VodEn       string `json:"vod_en"`
 	VodPic      string `json:"vod_pic"`
 	VodPlayFrom string `json:"vod_play_from"`
 	VodDownFrom string `json:"vod_down_from"`
@@ -44,15 +44,15 @@ type MovieList struct {
 type ConfigFile struct {
 	URI  string       `json:"uri"`
 	ZYFL bool         `json:"zyfl"`
-	ZYID string       `json:"zyid"`
+	ZYID int64        `json:"zyid"`
 	List []ConfigList `json:"list"`
 	AREA []ConfigArea `json:"area"`
 }
 
 // ConfigList Config List
 type ConfigList struct {
-	ID  string `json:"id"`
-	SID int64  `json:"sid"`
+	ID  int64 `json:"id"`
+	SID int64 `json:"sid"`
 }
 
 // ConfigArea config area
@@ -200,7 +200,7 @@ func getData(u string) ([]MovieList, bool) {
 }
 
 // MakeData make data
-func MakeData(b []MovieList, l []ConfigList, z bool, id string, areas []ConfigArea) {
+func MakeData(b []MovieList, l []ConfigList, z bool, id int64, areas []ConfigArea) {
 	for _, item := range b {
 		classifyid := getTopID(item.TypeID, l, z, item.VodArea, id, areas) //传入id对应获取到分类id
 
@@ -250,7 +250,7 @@ func MakeData(b []MovieList, l []ConfigList, z bool, id string, areas []ConfigAr
 }
 
 // getTopID get top id
-func getTopID(id string, l []ConfigList, z bool, area string, i string, areas []ConfigArea) (gid int64) {
+func getTopID(id int64, l []ConfigList, z bool, area string, i int64, areas []ConfigArea) (gid int64) {
 	if z {
 		for _, item := range l {
 			if id == i {
