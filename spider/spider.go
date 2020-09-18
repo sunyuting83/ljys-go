@@ -35,7 +35,7 @@ type MovieList struct {
 	VodLang     string `json:"vod_lang"`
 	TypeScore   string `json:"vod_score"`
 	VodDuration string `json:"vod_duration"`
-	VodRemarks  string `json:"vod_remark"`
+	VodRemarks  string `json:"vod_remarks"`
 	VodDirector string `json:"vod_director"`
 	VodActor    string `json:"vod_actor"`
 }
