@@ -1,7 +1,7 @@
 package models
 
 import (
-	orm "newapp/database"
+	orm "imovie/database"
 	"time"
 )
 

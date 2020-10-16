@@ -1,7 +1,7 @@
 package models
 
 import (
-	orm "newapp/database"
+	orm "imovie/database"
 )
 
 // MvClassify struct
@@ -9,6 +9,7 @@ type MvClassify struct {
 	ID    int64  `json:"id" gorm:"primary_key, column:id"`
 	TopID int64  `json:"top_id" gorm:"column:top_id"`
 	CName string `json:"c_name" gorm:"column:c_name"`
+	Other string `json:"other" gorm:"column:other"`
 }
 
 // BigClass 列表
@@ -29,7 +30,7 @@ func (classify *MvClassify) SmallClass(id int64) (classifys []MvClassify, err er
 
 // GetClass 列表
 func (classify *MvClassify) GetClass(id int64) (classifys []MvClassify, err error) {
-	if err = orm.Eloquent.Where("top_id = ?", id).Select("id, top_id, c_name").Find(&classifys).Error; err != nil {
+	if err = orm.Eloquent.Where("top_id = ?", id).Select("id, top_id, c_name, other").Find(&classifys).Error; err != nil {
 		return
 	}
 	return

@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	orm "newapp/database"
-	leveldb "newapp/leveldb"
-	"newapp/router"
+	orm "imovie/database"
+	leveldb "imovie/leveldb"
+	"imovie/router"
 	"strings"
 
 	"github.com/gin-gonic/gin"

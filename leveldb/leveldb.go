@@ -2,7 +2,7 @@ package leveldb
 
 import (
 	"fmt"
-	utils "newapp/utils"
+	utils "imovie/utils"
 	"sync"
 
 	"github.com/alash3al/redix/kvstore/leveldb"
@@ -24,7 +24,7 @@ var (
 
 func init() {
 
-	Leveldb, Errdb = leveldb.OpenLevelDB(utils.GetDBPath("level", false))
+	Leveldb, Errdb = leveldb.OpenLevelDB(utils.GetDBPath("level", true))
 	if Errdb != nil {
 		fmt.Println(Errdb)
 	}

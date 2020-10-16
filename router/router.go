@@ -1,8 +1,8 @@
 package router
 
 import (
-	apis "newapp/api/apis"
-	utils "newapp/utils"
+	apis "imovie/api/apis"
+	utils "imovie/utils"
 
 	"github.com/gin-gonic/gin"
 )

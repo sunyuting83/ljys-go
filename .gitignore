@@ -8,3 +8,9 @@ movie.zip
 m.zip
 start.sh
 IgnoreDB
+node_modules
+model
+spider
+db.zip
+package.json
+yarn.lock

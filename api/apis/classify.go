@@ -1,7 +1,7 @@
 package apis
 
 import (
-	model "newapp/database/models"
+	model "imovie/database/models"
 )
 
 // MakeClassify make classify list

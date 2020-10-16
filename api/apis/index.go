@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	model "newapp/database/models"
-	leveldb "newapp/leveldb"
+	model "imovie/database/models"
+	leveldb "imovie/leveldb"
 
 	"github.com/gin-gonic/gin"
 )

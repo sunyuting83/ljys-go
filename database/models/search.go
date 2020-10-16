@@ -1,6 +1,6 @@
 package models
 
-import orm "newapp/database"
+import orm "imovie/database"
 
 // SearchKey movie data
 type SearchKey struct {
