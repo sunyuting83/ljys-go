@@ -18,7 +18,7 @@ var (
 func init() {
 	// Eloquent, err = gorm.Open("mysql", "root:root@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=True&loc=Local&timeout=10ms")
 	// utils.GetDBPath 获取程序运行目录 返回sqlite数据库文件.第二个参数是dev模式true表示dev返回预定目录
-	Eloquent, DbErr = gorm.Open("sqlite3", utils.GetDBPath("d", true))
+	Eloquent, DbErr = gorm.Open("sqlite3", utils.GetDBPath("d", false))
 	if DbErr != nil {
 		log.Fatal("error daabase")
 	}
